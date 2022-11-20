@@ -1,24 +1,28 @@
 import axios from 'axios';
-import { useEffect, useState, KeyboardEvent } from 'react';
+import { useEffect, useState, KeyboardEvent, useRef } from 'react';
 import { themeChange } from 'theme-change';
-import { ThemeSelect } from './ThemeSelect/ThemeSelect';
+import { GithubLink } from './components/GithubLink';
+import { QuoteDisplay } from './components/QuoteDisplay';
+import { ThemeSelect } from './components/ThemeSelect/ThemeSelect';
 
-interface Quote {
+interface QuoteType {
     content: string;
     author: string;
 }
 
 function App() {
-    const [quote, setQuote] = useState<Quote>({
+    const appRef = useRef<HTMLInputElement>(null);
+    const [quote, setQuote] = useState<QuoteType>({
         content: '',
         author: '',
     });
 
     // Generate a new quote when the SPACEBAR is pressed
     const handleKeyboardEvent = (e: KeyboardEvent<HTMLElement>) => {
-        if (e.key == ' ') getQuote();
+        if (e.key === ' ') getQuote();
     };
 
+    // Fetches random quote from api
     const getQuote = () => {
         axios.get('https://api.quotable.io/random').then((res) =>
             setQuote({
@@ -29,28 +33,24 @@ function App() {
     };
 
     useEffect(() => {
+        // Focus on div to allow for keypress to be tracked immediately
+        if (appRef.current) {
+            appRef.current.focus();
+        }
+
         getQuote();
         themeChange(false);
-        // 👆 false parameter is required for react project
     }, []);
 
     return (
-        <div className="App" onKeyDown={handleKeyboardEvent} tabIndex={0}>
+        <div className="App" onKeyDown={handleKeyboardEvent} tabIndex={0} ref={appRef}>
             <header className="App-header bg-base-200">
                 <ThemeSelect />
                 <div className="card bg-base-100 shadow-xl w-10/12 lg:w-6/12">
                     <div className="card-body text-center">
-                        {quote.content === '' ? (
-                            <button className="btn btn-ghost loading"></button>
-                        ) : (
-                            <>
-                                <h2 className="card-title justify-center">
-                                    {quote.content}
-                                </h2>
-                                <p className="italic">- {quote.author}</p>
-                            </>
-                        )}
-                        <div className="card-actions justify-center mt-10">
+                        <QuoteDisplay content={quote.content} author={quote.author} />
+                        <hr className="mt-4" />
+                        <div className="card-actions justify-center mt-6">
                             <div>
                                 <button
                                     className="btn btn-primary gap-2"
@@ -77,14 +77,7 @@ function App() {
                         </div>
                     </div>
                 </div>
-                <button className="btn btn-active btn-lg btn-link capitalize absolute bottom-0">
-                    <a
-                        href="https://github.com/MichaelFarquhar/random-quote"
-                        target="_blank"
-                    >
-                        Github
-                    </a>
-                </button>
+                <GithubLink />
             </header>
         </div>
     );
