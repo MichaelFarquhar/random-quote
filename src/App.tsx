@@ -70,13 +70,21 @@ function App() {
                                     </svg>
                                     New Random Quote
                                 </button>
-                                <div className="mt-2 text-sm">
+                                <div className="mt-3 text-sm">
                                     or press <kbd className="kbd kbd-sm">SPACE</kbd>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <button className="btn btn-active btn-lg btn-link capitalize absolute bottom-0">
+                    <a
+                        href="https://github.com/MichaelFarquhar/random-quote"
+                        target="_blank"
+                    >
+                        Github
+                    </a>
+                </button>
             </header>
         </div>
     );
