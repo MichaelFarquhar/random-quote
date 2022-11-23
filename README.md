@@ -1,5 +1,8 @@
 # Random Quote App
 
+> This project has an identical counterpart [here](https://github.com/MichaelFarquhar/random-quote-vue), built using Vue instead of React.
+
+### Features
 - Built with React and Typescript.
 - Styled with [daisyUI](https://daisyui.com/).
 - Makes requests to the [Quotable Api](https://github.com/lukePeavey/quotable) to retrieve random quotes.
